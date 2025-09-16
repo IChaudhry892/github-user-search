@@ -1,0 +1,64 @@
+:root {
+  --color-bg: white;
+  --color-text: black;
+  --color-text-secondary: white;
+  --color-text-tertiary: rgb(152, 152, 152);
+  --color-accent: rgb(0, 128, 255);
+
+  --font: Poppins, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font);
+  margin: 0;
+  padding-top: 4.5rem;
+}
+p, h2, h1 {
+  margin: 0;
+  padding: 0;
+}
+
+.search-container {
+  border: 1px solid red;
+  max-width: 500px;
+  width: 75%;
+  margin: 1.5rem auto;
+  padding: 1rem 1rem;
+}
+.search-container p {
+  color: var(--color-text-tertiary);
+}
+.search {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+.search:focus-within {
+  outline: 1px solid blue;
+}
+.search-input {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 100px 10px 20px; 
+  line-height: 1;
+  box-sizing: border-box;
+  outline: none;
+}
+.search-button {
+  position: absolute;
+  right: 3px; 
+  top: 3px;
+  bottom: 3px;
+  border: 0;
+  background: var(--color-accent);
+  color: var(--color-text-secondary);
+  outline: none;
+  margin: 0;
+  padding: 0 10px;
+  border-radius: 8px;
+  z-index: 2;
+}

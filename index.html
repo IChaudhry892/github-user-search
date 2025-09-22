@@ -19,7 +19,7 @@
         <h1>Search Github Users</h1>
         <p>Enter a user name to search for user profiles and repositories</p>
         <div class="search">
-          <input class="search-input" id="usernameInput">
+          <input class="search-input" type="text" id="usernameInput" spellcheck="false">
           <button class="search-button">Search</button>
         </div>
       </div>
@@ -32,36 +32,36 @@
 
         <div class="profile-info-section">
           <div class="profile-info-header">
-            <p class="profile-username">@username</p>
-            <p class="profile-created-date">Member Since XX Mon XXXX</p>
+            <p class="profile-username" id="profileUsername">@username</p>
+            <p class="profile-created-date" id="profileCreatedDate">Member Since XX Mon XXXX</p>
           </div>
           <div class="profile-info-stats">
             <div class="stat-item">
               <p class="stat-name">Public Repos</p>
-              <p class="stat-count">X</p>
+              <p class="stat-count" id="publicReposCount">X</p>
             </div>
             <div class="stat-item">
               <p class="stat-name">Followers</p>
-              <p class="stat-count">X</p>
+              <p class="stat-count" id="followersCount">X</p>
             </div>
             <div class="stat-item">
               <p class="stat-name">Following</p>
-              <p class="stat-count">X</p>
+              <p class="stat-count" id="followingCount">X</p>
             </div>
           </div>
           <div class="profile-info-bio">
             <div class="bio-grid">
               <div class="bio-grid-item">
-                <p>Location</p>
+                <p id="locationLabel">Location:</p><p id="locationValue" class="bio-grid-item-value">locationName</p>
               </div>
               <div class="bio-grid-item">
-                <p>Twitter</p>
+                <p id="twitterHandleLabel">Twitter:</p><p id="twitterHandleValue" class="bio-grid-item-value">@twitterHandle</p>
               </div>
               <div class="bio-grid-item">
-                <p>Website</p>
+                <p id="blogLabel">Blog:</p><p id="blogValue" class="bio-grid-item-value">blogURL</p>
               </div>
               <div class="bio-grid-item">
-                <p>Company</p>
+                <p id="companyLabel">Company:</p><p id="companyValue" class="bio-grid-item-value">companyName</p>
               </div>
             </div>
           </div>

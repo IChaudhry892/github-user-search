@@ -146,3 +146,12 @@ p, h2, h1 {
   grid-template-rows: repeat(2, 1fr);
   gap: 0.5rem 0rem;
 }
+.bio-grid-item {
+  display: flex;
+}
+.bio-grid-item p:first-child {
+  flex: 1;
+}
+.bio-grid-item-value {
+  flex: 2;
+}

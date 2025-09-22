@@ -28,7 +28,13 @@ async function loadUserProfile() {
 // Throws: Error if the request fails (e.g., invalid username).
 async function fetchData(username) {
     try {
-        const response = await fetch(`https://api.github.com/users/${username}`);
+        const response = await fetch(`https://api.github.com/users/${username}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "User-Agent": `${username}`
+            }
+        });
 
         if (!response.ok) {
             throw new Error("Could not fetch resource");

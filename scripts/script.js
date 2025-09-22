@@ -1,33 +1,30 @@
-// fetch("https://pokeapi.co/api/v2/pokemon/charizard")
-//     .then(response => {
-//         if (!response.ok) {
-//             throw new Error("Could not fetch resource");
-//         }
-//         return response.json();
-//     })
-//     .then(data => console.log(data.name))
-//     .catch(error => console.log(error));
-
-// fetchData();
-
 const searchButton = document.querySelector(".search-button");
-searchButton.addEventListener("click", fetchData);
+const usernameInput = document.getElementById("usernameInput");
 
+// Event Listeners
+searchButton.addEventListener("click", fetchData);
+usernameInput.addEventListener("keypress", (e) => {
+    if (e.key == "Enter")
+        fetchData();
+})
+
+// GitHub API fetch function
 async function fetchData() {
     try {
-        const username = document.getElementById("username").value.toLowerCase();
+        const username = usernameInput.value.toLowerCase();
 
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${username}`);
+        const response = await fetch(`https://api.github.com/users/${username}`);
 
         if (!response.ok) {
             throw new Error("Could not fetch resource");
         }
 
         const data = await response.json();
-        const pokemonSprite = data.sprites.front_default;
-        const imgElement = document.getElementById("pokemonSprite");
+        console.log(data);
+        const userAvatar = data.avatar_url;
+        const imgElement = document.getElementById("userAvatar");
 
-        imgElement.src = pokemonSprite;
+        imgElement.src = userAvatar;
         imgElement.style.display = "block";
     }
     catch(error) {

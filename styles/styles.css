@@ -1,10 +1,11 @@
 :root {
   --color-bg: white;
+  --color-bg-secondary: rgb(248, 248, 248);
   --color-text: black;
   --color-text-secondary: white;
-  --color-text-tertiary: rgb(152, 152, 152);
-  /* --color-accent: rgb(0, 128, 255); */
+  --color-text-tertiary: rgb(120, 120, 120);
   --color-accent: #238636;
+  --color-accent-hover: #1b652a;
 
   --font: Poppins, Arial, sans-serif;
 }
@@ -23,13 +24,14 @@ p, h2, h1 {
 
 .search-container {
   border: 1px solid red;
-  max-width: 500px;
-  width: 75%;
+  max-width: 900px;
+  width: 87%;
   margin: 1.5rem auto;
   padding: 1rem 1rem;
 }
 .search-container p {
   color: var(--color-text-tertiary);
+  margin-bottom: 0.8rem;
 }
 .search {
   position: relative;
@@ -62,4 +64,85 @@ p, h2, h1 {
   padding: 0 10px;
   border-radius: 8px;
   z-index: 2;
+}
+
+.profile-container {
+  border: 1px solid blue;
+  max-width: 900px;
+  width: 87%;
+  display: flex;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.profile-picture-section {
+  border: 1px solid red;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#userAvatar {
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+  border-radius: 100%;
+  margin-bottom: 1rem;
+}
+.view-profile-button {
+  background: var(--color-accent);
+  color: var(--color-text-secondary);
+  border-radius: 8px;
+  border: none;
+  padding: 8px 18px;
+  transition: background-color 0.1s ease-in-out;
+}
+.view-profile-button:hover {
+  cursor: pointer;
+  background: var(--color-accent-hover);
+}
+.profile-info-section {
+  border: 1px solid purple;
+  flex: 3;
+}
+.profile-info-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.profile-username {
+  color: var(--color-accent);
+}
+.profile-created-date {
+  color: var(--color-text-tertiary);
+}
+
+.profile-info-stats {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--color-bg-secondary);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+}
+.profile-info-stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.stat-name {
+  color: var(--color-text-tertiary);
+}
+.stat-count {
+  font-weight: bold;
+  font-size: 2rem;
+}
+
+.profile-info-bio {
+  color: var(--color-text-tertiary);
+}
+.bio-grid {
+  padding: 1rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.5rem 0rem;
 }

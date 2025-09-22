@@ -1,5 +1,6 @@
 const searchButton = document.querySelector(".search-button");
 const usernameInput = document.getElementById("usernameInput");
+const profileContainer = document.querySelector(".profile-container");
 
 // Event Listeners
 searchButton.addEventListener("click", fetchData);
@@ -25,7 +26,7 @@ async function fetchData() {
         const imgElement = document.getElementById("userAvatar");
 
         imgElement.src = userAvatar;
-        imgElement.style.display = "block";
+        profileContainer.style.display = "flex";
     }
     catch(error) {
         console.error(error);

@@ -3,7 +3,8 @@
   --color-text: black;
   --color-text-secondary: white;
   --color-text-tertiary: rgb(152, 152, 152);
-  --color-accent: rgb(0, 128, 255);
+  /* --color-accent: rgb(0, 128, 255); */
+  --color-accent: #238636;
 
   --font: Poppins, Arial, sans-serif;
 }

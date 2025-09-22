@@ -9,7 +9,9 @@ usernameInput.addEventListener("keypress", (e) => {
         loadUserProfile();
 })
 
-// Profile Handler Function
+// Handles profile search action (button click or Enter key).
+// Gets the username from the input, fetches GitHub profile data,
+// and updates the profile container with the retrieved information.
 async function loadUserProfile() {
     const username = usernameInput.value.toLowerCase();
 
@@ -21,7 +23,9 @@ async function loadUserProfile() {
     }
 }
 
-// GitHub API Fetch Function
+// Fetches GitHub user data from the public API for a given username.
+// Returns: JSON object containing profile details if successful.
+// Throws: Error if the request fails (e.g., invalid username).
 async function fetchData(username) {
     try {
         const response = await fetch(`https://api.github.com/users/${username}`);
@@ -35,62 +39,43 @@ async function fetchData(username) {
     }
 }
 
-// Update Profile Container Function
+// Updates the DOM elements inside the profile container with GitHub user data.
+// Populates avatar, username, join date, repos count, followers/following,
+// and optional fields like location, Twitter handle, blog, and company.
+// If a field is unavailable, "Not Available" is displayed instead.
 function updateProfileContainer(data) {
-    const userAvatar = document.getElementById("userAvatar");
-    userAvatar.src = data.avatar_url;
+    // Update basic profile info
+    document.getElementById("userAvatar").src = data.avatar_url;
+    document.getElementById("profileUsername").textContent = `@${data.login}`;
+    document.getElementById("profileCreatedDate").textContent = `Member Since ${new Date(data.created_at).toDateString()}`;
 
-    const profileUsername = document.getElementById("profileUsername");
-    profileUsername.textContent = `@${data.login}`;
+    // Update stats
+    document.getElementById("publicReposCount").textContent = data.public_repos;
+    document.getElementById("followersCount").textContent = data.followers;
+    document.getElementById("followingCount").textContent = data.following;
 
-    const profileCreatedDate = document.getElementById("profileCreatedDate");
-    const createdDate = new Date(data.created_at);
-    profileCreatedDate.textContent = `Member Since ${createdDate.toDateString()}`;
+    // Update bio fields with helper function
+    updateBioField("locationLabel", "locationValue", data.location);
+    updateBioField("twitterHandleLabel", "twitterHandleValue", data.twitter_username);
+    updateBioField("blogLabel", "blogValue", data.blog);
+    updateBioField("companyLabel", "companyValue", data.company);
 
-    const publicReposCount = document.getElementById("publicReposCount");
-    publicReposCount.textContent = data.public_repos;
-
-    const followersCount = document.getElementById("followersCount");
-    followersCount.textContent = data.followers;
-
-    const followingCount = document.getElementById("followingCount");
-    followingCount.textContent = data.following;
-
-    const locationValue = document.getElementById("locationValue");
-    if (data.location) {
-        document.getElementById("locationLabel").style.color = "var(--color-text)";
-        locationValue.style.color = "var(--color-text)";
-        locationValue.textContent = data.location;
-    } else {
-        locationValue.textContent = "Not Available";
-    }
-
-    const twitterHandleValue = document.getElementById("twitterHandleValue");
-    if (data.twitter_username) {
-        document.getElementById("twitterHandleLabel").style.color = "var(--color-text)";
-        twitterHandleValue.style.color = "var(--color-text)";
-        twitterHandleValue.textContent = `@${data.twitter_username}`;
-    } else {
-        twitterHandleValue.textContent = "Not Available";
-    }
-
-    const blogValue = document.getElementById("blogValue");
-    if (data.blog) {
-        document.getElementById("blogLabel").style.color = "var(--color-text)";
-        blogValue.style.color = "var(--color-text)";
-        blogValue.textContent = data.blog;
-    } else {
-        blogValue.textContent = "Not Available";
-    }
-
-    const companyValue = document.getElementById("companyValue");
-    if (data.company) {
-        document.getElementById("companyLabel").style.color = "var(--color-text)";
-        companyValue.style.color = "var(--color-text)";
-        companyValue.textContent = data.company;
-    } else {
-        companyValue.textContent = "Not Available";
-    }
-
+    // Make profile container visible
     profileContainer.style.display = "flex";
+}
+
+// Helper function to update individual bio fields (location, Twitter, blog, company).
+// If the data value is present, it sets the text and styles it normally.
+// If absent, it sets the text to "Not Available".
+function updateBioField(labelId, valueId, dataValue) {
+    const labelElement = document.getElementById(labelId);
+    const valueElement = document.getElementById(valueId);
+
+    if (dataValue) {
+        labelElement.style.color = "var(--color-text)";
+        valueElement.style.color = "var(--color-text)";
+        valueElement.textContent = dataValue;
+    } else {
+        valueElement.textContent = "Not Available";
+    }
 }

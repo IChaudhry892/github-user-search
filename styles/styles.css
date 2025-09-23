@@ -95,6 +95,7 @@ p, h2, h1 {
   border: none;
   padding: 8px 18px;
   transition: background-color 0.1s ease-in-out;
+  text-decoration: none;
 }
 .view-profile-button:hover {
   cursor: pointer;

@@ -16,8 +16,11 @@ async function loadUserProfile() {
     const username = usernameInput.value.toLowerCase();
 
     try {
-        const data = await fetchData(username);
-        updateProfileContainer(data);
+        const userData = await fetchUserData(username);
+        updateProfileContainer(userData);
+
+        const repoData = await fetchRepoData(username);
+        console.log(repoData);
     } catch (error) {
         console.error(error);
     }
@@ -26,7 +29,7 @@ async function loadUserProfile() {
 // Fetches GitHub user data from the public API for a given username.
 // Returns: JSON object containing profile details if successful.
 // Throws: Error if the request fails (e.g., invalid username).
-async function fetchData(username) {
+async function fetchUserData(username) {
     try {
         const response = await fetch(`https://api.github.com/users/${username}`, {
             method: "GET",
@@ -37,7 +40,26 @@ async function fetchData(username) {
         });
 
         if (!response.ok) {
-            throw new Error("Could not fetch resource");
+            throw new Error("Could not fetch user data");
+        }
+        return await response.json();
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function fetchRepoData(username) {
+    try {
+        const response = await fetch(`https://api.github.com/users/${username}/repos`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "User-Agent": `${username}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("Could not fetch user repo data");
         }
         return await response.json();
     } catch (error) {
@@ -54,6 +76,7 @@ function updateProfileContainer(data) {
     document.getElementById("userAvatar").src = data.avatar_url;
     document.getElementById("profileUsername").textContent = `@${data.login}`;
     document.getElementById("profileCreatedDate").textContent = `Member Since ${new Date(data.created_at).toDateString()}`;
+    document.getElementById("viewProfileButton").href = data.html_url;
 
     // Update stats
     document.getElementById("publicReposCount").textContent = data.public_repos;
@@ -84,4 +107,8 @@ function updateBioField(labelId, valueId, dataValue) {
     } else {
         valueElement.textContent = "Not Available";
     }
+}
+
+function updateRecentReposContainer() {
+
 }

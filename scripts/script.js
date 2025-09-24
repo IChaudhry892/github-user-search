@@ -1,6 +1,7 @@
 const searchButton = document.querySelector(".search-button");
 const usernameInput = document.getElementById("usernameInput");
 const profileContainer = document.querySelector(".profile-container");
+const searchErrorContainer = document.querySelector(".search-error-container");
 
 // Event Listeners
 searchButton.addEventListener("click", loadUserProfile);
@@ -14,6 +15,15 @@ usernameInput.addEventListener("keypress", (e) => {
 // and updates the profile container with the retrieved information.
 async function loadUserProfile() {
     const username = usernameInput.value.toLowerCase();
+
+    // Hide profile and error containers when starting a new search
+    searchErrorContainer.style.display = "none";
+    profileContainer.style.display = "none";
+
+    // Display error container for empty username input
+    if (!username) {
+        updateSearchErrorContainer("Error: Enter User");
+    }
 
     try {
         const userData = await fetchUserData(username);
@@ -65,6 +75,11 @@ async function fetchRepoData(username) {
     } catch (error) {
         console.error(error);
     }
+}
+
+function updateSearchErrorContainer(errorMessage) {
+    document.getElementById("searchErrorText").textContent = errorMessage;
+    searchErrorContainer.style.display = "block";
 }
 
 // Updates the DOM elements inside the profile container with GitHub user data.

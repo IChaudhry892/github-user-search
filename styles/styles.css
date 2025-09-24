@@ -6,6 +6,7 @@
   --color-text-tertiary: rgb(120, 120, 120);
   --color-accent: #238636;
   --color-accent-hover: #1b652a;
+  --color-error-box: rgb(215, 42, 42);
 
   --font: Poppins, Arial, sans-serif;
 }
@@ -69,6 +70,17 @@ p, h2, h1 {
   cursor: pointer;
   background: var(--color-accent-hover);
 }
+
+.search-error-container{
+  background: var(--color-error-box);
+  max-width: 900px;
+  width: 87%;
+  margin: 0 auto;
+  padding: 1rem;
+  color: var(--color-text-secondary);
+  border-radius: 8px;
+}
+
 .profile-container {
   border: 1px solid blue;
   max-width: 900px;

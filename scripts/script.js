@@ -23,6 +23,7 @@ async function loadUserProfile() {
     // Display error container for empty username input
     if (!username) {
         updateSearchErrorContainer("Error: Enter User");
+        return;
     }
 
     try {
@@ -33,6 +34,7 @@ async function loadUserProfile() {
         console.log(repoData);
     } catch (error) {
         console.error(error);
+        updateSearchErrorContainer("Error: User Not Found");
     }
 }
 
@@ -58,6 +60,9 @@ async function fetchUserData(username) {
     }
 }
 
+// Fetches GitHub user repo data from the public API for a given username.
+// Returns: JSON object containing repo details if successful.
+// Throws: Error if the request fails (e.g., invalid username).
 async function fetchRepoData(username) {
     try {
         const response = await fetch(`https://api.github.com/users/${username}/repos`, {
@@ -77,6 +82,11 @@ async function fetchRepoData(username) {
     }
 }
 
+// Updates the h2 element inside the search error container with a custom error
+// message and displays it.
+// Used to show validation errors (empty input) or API errors (user not found).
+// Takes an error message string and updates the error text element before showing
+// the container.
 function updateSearchErrorContainer(errorMessage) {
     document.getElementById("searchErrorText").textContent = errorMessage;
     searchErrorContainer.style.display = "block";

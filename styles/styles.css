@@ -65,7 +65,10 @@ p, h2, h1 {
   border-radius: 8px;
   z-index: 2;
 }
-
+.search-button:hover {
+  cursor: pointer;
+  background: var(--color-accent-hover);
+}
 .profile-container {
   border: 1px solid blue;
   max-width: 900px;

@@ -39,11 +39,11 @@ async function loadUserProfile() {
 }
 
 // Fetches GitHub user data from the public API for a given username.
-// Returns: JSON object containing profile details if successful.
-// Throws: Error if the request fails (e.g., invalid username).
-async function fetchUserData(username) {
+// Takes a username and endpoint path, returns JSON data if successful.
+// Handles authentication headers and error responses consistently.
+async function fetchGitHubData(username, endpoint) {
     try {
-        const response = await fetch(`https://api.github.com/users/${username}`, {
+        const response = await fetch(`https://api.github.com/users/${username}${endpoint}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -52,34 +52,25 @@ async function fetchUserData(username) {
         });
 
         if (!response.ok) {
-            throw new Error("Could not fetch user data");
+            throw new Error(`Could not fetch data for user ${username} from endpoint ${endpoint}`);
         }
         return await response.json();
     } catch (error) {
         console.error(error);
+        throw error; // Re-throw to let calling function handle it
     }
 }
 
-// Fetches GitHub user repo data from the public API for a given username.
-// Returns: JSON object containing repo details if successful.
-// Throws: Error if the request fails (e.g., invalid username).
-async function fetchRepoData(username) {
-    try {
-        const response = await fetch(`https://api.github.com/users/${username}/repos`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "User-Agent": `${username}`
-            }
-        });
+// Fetches GitHub user profile data for a given username.
+// Returns: JSON object containing profile details if successful.
+async function fetchUserData(username) {
+    return await fetchGitHubData(username, "");
+}
 
-        if (!response.ok) {
-            throw new Error("Could not fetch user repo data");
-        }
-        return await response.json();
-    } catch (error) {
-        console.error(error);
-    }
+// Fetches GitHub user repository data for a given username.
+// Returns: JSON array containing repo details if successful.
+async function fetchRepoData(username) {
+    return await fetchGitHubData(username, "/repos");
 }
 
 // Updates the h2 element inside the search error container with a custom error

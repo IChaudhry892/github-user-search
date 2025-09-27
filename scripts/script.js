@@ -3,6 +3,7 @@ const usernameInput = document.getElementById("usernameInput");
 const profileContainer = document.querySelector(".profile-container");
 const searchErrorContainer = document.querySelector(".search-error-container");
 const recentReposContainer = document.querySelector(".recent-repos-container");
+const loadingContainer = document.querySelector(".loading-icon-container");
 
 // Event Listeners
 searchButton.addEventListener("click", loadUserProfile);
@@ -17,9 +18,10 @@ usernameInput.addEventListener("keypress", (e) => {
 async function loadUserProfile() {
     const username = usernameInput.value.toLowerCase();
 
-    // Hide profile and error containers when starting a new search
+    // Hide profile, error, and recent repos containers when starting a new search
     searchErrorContainer.style.display = "none";
     profileContainer.style.display = "none";
+    recentReposContainer.style.display = "none";
 
     // Display error container for empty username input
     if (!username) {
@@ -28,15 +30,21 @@ async function loadUserProfile() {
     }
 
     try {
+        // Show loading icon while fetching data
+        loadingContainer.style.display = "block";
+
         const userData = await fetchUserData(username);
         updateProfileContainer(userData);
 
         const repoData = await fetchRepoData(username);
-        console.log(repoData);  // FOR DEBUGGING
         const recentRepos = getRecentRepos(repoData, "updated_at", 5);
         updateRecentReposContainer(recentRepos);
+        
+        // Hide loading icon after all data is loaded
+        loadingContainer.style.display = "none";
     } catch (error) {
         console.error(error);
+        loadingContainer.style.display = "none"; // Hide loading on error
         updateSearchErrorContainer("Error: User Not Found");
     }
 }
@@ -80,9 +88,7 @@ function getRecentRepos(repoData, orderBy, count) {
     const sortedRepos = repoData.sort(function (a, b) {
         return new Date(b[orderBy]) - new Date(a[orderBy])
     })
-    console.log(sortedRepos);   // FOR DEBUGGING
     const recentRepos = sortedRepos.slice(0, count);
-    console.log(recentRepos);   // FOR DEBUGGING
     return recentRepos;
 }
 
@@ -134,11 +140,15 @@ function updateBioField(labelId, valueId, dataValue) {
         valueElement.style.color = "var(--color-text)";
         valueElement.textContent = dataValue;
     } else {
+        labelElement.style.color = "var(--color-text-tertiary)";
+        valueElement.style.color = "var(--color-text-tertiary)";
         valueElement.textContent = "Not Available";
     }
 }
 
 function updateRecentReposContainer(recentRepos) {
+    recentReposContainer.innerHTML = "";
+
     recentRepos.forEach((repo) => {
         const repoElement = createRepoElement(repo);
         recentReposContainer.appendChild(repoElement);
@@ -152,22 +162,22 @@ function createRepoElement(repo) {
     repoDiv.className = "repo";
 
     repoDiv.innerHTML = `
-    <div class="repo-name-section">
-        <a href=${repo.html_url} target="__blank">${repo.name}</a>
+        <div class="repo-name-section">
+            <a class="repo-link" href=${repo.html_url} target="_blank">${repo.name}</a>
         </div>
         <div class="repo-stats-section">
-        <div class="repo-stat">
-            <p id="languageLabel">Language:</p><p id="languageValue" class="repo-stat-value">${repo.language}</p>
-        </div>
-        <div class="repo-stat">
-            <p id="starsLabel">Stars:</p><p id="starsValue" class="repo-stat-value">${repo.stargazers_count}</p>
-        </div>
-        <div class="repo-stat">
-            <p id="watchersLabel">Watchers:</p><p id="watchersValue" class="repo-stat-value">${repo.watchers_count}</p>
-        </div>
-        <div class="repo-stat">
-            <p id="forksLabel">Forks:</p><p id="forksValue" class="repo-stat-value">${repo.forks_count}</p>
-        </div>
+            <div class="repo-stat">
+                <p id="languageLabel">Language:</p><p id="languageValue" class="repo-stat-value">${repo.language}</p>
+            </div>
+            <div class="repo-stat">
+                <p id="starsLabel">Stars:</p><p id="starsValue" class="repo-stat-value">${repo.stargazers_count}</p>
+            </div>
+            <div class="repo-stat">
+                <p id="watchersLabel">Watchers:</p><p id="watchersValue" class="repo-stat-value">${repo.watchers_count}</p>
+            </div>
+            <div class="repo-stat">
+                <p id="forksLabel">Forks:</p><p id="forksValue" class="repo-stat-value">${repo.forks_count}</p>
+            </div>
         </div>
     `;
 

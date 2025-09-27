@@ -7,6 +7,7 @@
   --color-accent: #238636;
   --color-accent-hover: #1b652a;
   --color-error-box: rgb(215, 42, 42);
+  --color-border-rgb: 120, 120, 120;
 
   --font: Poppins, Arial, sans-serif;
 }
@@ -16,7 +17,7 @@ body {
   color: var(--color-text);
   font-family: var(--font);
   margin: 0;
-  padding-top: 4.5rem;
+  padding: 4.5rem 0 1.5rem;
 }
 p, h2, h1 {
   margin: 0;
@@ -24,11 +25,13 @@ p, h2, h1 {
 }
 
 .search-container {
-  border: 1px solid red;
+  border: 1px solid rgba(var(--color-border-rgb), 0.3);
+  border-radius: 8px;
   max-width: 900px;
   width: 87%;
   margin: 1.5rem auto;
   padding: 1rem 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .search-container p {
   color: var(--color-text-tertiary);
@@ -81,17 +84,29 @@ p, h2, h1 {
   border-radius: 8px;
 }
 
+.loading-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 200px;
+}
+.loading-icon-gif {
+  max-width: 150px;
+}
+
 .profile-container {
-  border: 1px solid blue;
+  border: 1px solid rgba(var(--color-border-rgb), 0.3);
+  border-radius: 8px;
   max-width: 900px;
   width: 87%;
   display: flex;
   margin: 0 auto;
   padding: 1rem;
   margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .profile-picture-section {
-  border: 1px solid red;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -118,7 +133,6 @@ p, h2, h1 {
   background: var(--color-accent-hover);
 }
 .profile-info-section {
-  border: 1px solid purple;
   flex: 3;
 }
 .profile-info-header {
@@ -174,19 +188,22 @@ p, h2, h1 {
 }
 
 .recent-repos-container {
-  border: 1px solid green;
+  border: 1px solid rgba(var(--color-border-rgb), 0.3);
+  border-radius: 8px;
   max-width: 900px;
   width: 87%;
   display: flex;
   flex-direction: column;
   margin: 0 auto;
   padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 .repo {
-  border: 1px solid red;
   padding: 1rem;
   display: flex;
   margin-bottom: 1rem;
+  background-color: var(--color-bg-secondary);
+  border-radius: 8px;
 }
 .repo:last-child {
   margin: 0;
@@ -200,6 +217,28 @@ p, h2, h1 {
 .repo-name-section p {
   padding-left: 0.5rem;
 }
+.repo-link {
+  text-decoration: none;
+  transition: 0.2s ease-in-out;
+  position: relative;
+  color: var(--color-accent);
+}
+.repo-link:hover {
+  color: var(--color-accent-hover);
+}
+.repo-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: var(--color-accent-hover);
+  transition: width 0.3s;
+}
+.repo-link:hover::after {
+  width: 100%;
+}
 .repo-stats-section {
   flex: 3;
   display: grid;
@@ -212,6 +251,7 @@ p, h2, h1 {
 }
 .repo-stat p:first-child {
   flex: 1;
+  color: var(--color-text-tertiary);
 }
 .repo-stat-value {
   flex: 2;

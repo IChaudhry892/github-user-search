@@ -61,6 +61,9 @@ This project helped me develop several key web development skills:
 1. Clone the repository:
    ```bash
    git clone https://github.com/IChaudhry892/github-user-search.git
+   ```
+   or
+   ```bash
    git clone git@github.com:IChaudhry892/github-user-search.git
    ```
 

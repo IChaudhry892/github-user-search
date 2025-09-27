@@ -1,11 +1,26 @@
+// ==== CONSTANTS ====
+const ERROR_MESSAGES = {
+    EMPTY_USERNAME: "Error: Enter User",
+    USER_NOT_FOUND: "Error: User Not Found",
+    API_ERROR: "Error: Unable to fetch data"
+};
+
+const SORT_REPOS_BY = {
+    UPDATED: "updated_at",
+    CREATED: "created_at",
+    PUSHED: "pushed_at"
+}
+
+
+// ==== DOM ELEMENT REFERENCES ====
 const searchButton = document.querySelector(".search-button");
 const usernameInput = document.getElementById("usernameInput");
 const profileContainer = document.querySelector(".profile-container");
 const searchErrorContainer = document.querySelector(".search-error-container");
 const recentReposContainer = document.querySelector(".recent-repos-container");
-const loadingContainer = document.querySelector(".loading-icon-container");
 
-// Event Listeners
+
+// ==== EVENT LISTENERS ====
 searchButton.addEventListener("click", loadUserProfile);
 usernameInput.addEventListener("keypress", (e) => {
     if (e.key == "Enter")
@@ -18,37 +33,35 @@ usernameInput.addEventListener("keypress", (e) => {
 async function loadUserProfile() {
     const username = usernameInput.value.toLowerCase();
 
-    // Hide profile, error, and recent repos containers when starting a new search
-    searchErrorContainer.style.display = "none";
-    profileContainer.style.display = "none";
-    recentReposContainer.style.display = "none";
+    // Reset UI state when starting a new search
+    hideAllContainers();
 
     // Display error container for empty username input
     if (!username) {
-        updateSearchErrorContainer("Error: Enter User");
+        updateSearchErrorContainer(ERROR_MESSAGES.EMPTY_USERNAME);
         return;
     }
 
     try {
         // Show loading icon while fetching data
-        loadingContainer.style.display = "block";
+        createLoadingIcon();
 
         const userData = await fetchUserData(username);
         updateProfileContainer(userData);
 
         const repoData = await fetchRepoData(username);
-        const recentRepos = getRecentRepos(repoData, "updated_at", 5);
+        const recentRepos = getRecentRepos(repoData, SORT_REPOS_BY.UPDATED, 5);
         updateRecentReposContainer(recentRepos);
-        
-        // Hide loading icon after all data is loaded
-        loadingContainer.style.display = "none";
     } catch (error) {
         console.error(error);
-        loadingContainer.style.display = "none"; // Hide loading on error
-        updateSearchErrorContainer("Error: User Not Found");
+        // Hide loading on error
+        profileContainer.style.display = "none";
+        updateSearchErrorContainer(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 }
 
+
+// ==== API FUNCTIONS ====
 // Fetches GitHub user data from the public API for a given username.
 // Takes a username and endpoint path, returns JSON data if successful.
 // Handles authentication headers and error responses consistently.
@@ -63,7 +76,7 @@ async function fetchGitHubData(username, endpoint) {
         });
 
         if (!response.ok) {
-            throw new Error(`Could not fetch data for user ${username} from endpoint ${endpoint}`);
+            throw new Error(ERROR_MESSAGES.API_ERROR);
         }
         return await response.json();
     } catch (error) {
@@ -95,6 +108,8 @@ function getRecentRepos(repoData, orderBy, count) {
     return recentRepos;
 }
 
+
+// ==== UI UPDATE FUNCTIONS ====
 // Updates the h2 element inside the search error container with a custom error
 // message and displays it.
 // Used to show validation errors (empty input) or API errors (user not found).
@@ -110,6 +125,7 @@ function updateSearchErrorContainer(errorMessage) {
 // and optional fields like location, Twitter handle, blog, and company.
 // If a field is unavailable, "Not Available" is displayed instead.
 function updateProfileContainer(data) {
+    createProfileContent();
     // Update basic profile info
     document.getElementById("userAvatar").src = data.avatar_url;
     document.getElementById("profileUsername").textContent = `@${data.login}`;
@@ -163,6 +179,79 @@ function updateRecentReposContainer(recentRepos) {
     recentReposContainer.style.display = "flex";
 }
 
+
+// ==== HELPER FUNCTIONS ====
+// Hides all main containers to reset UI state
+function hideAllContainers() {
+    searchErrorContainer.style.display = "none";
+    profileContainer.style.display = "none";
+    recentReposContainer.style.display = "none";
+}
+
+// Clears existing elements in the profile container.
+// Generates a loading icon inside the profile container then makes the
+// container visible.
+function createLoadingIcon() {
+    profileContainer.innerHTML = '';
+    const loadingIcon = `
+        <div class="loading-icon">
+          <img class="loading-icon-gif" src="images/pikachu-running.gif" alt="Loading...">
+        </div>
+    `;
+    profileContainer.innerHTML = loadingIcon;
+    profileContainer.style.display = "flex";
+}
+
+// Clears existing elements in the profile container.
+// Generates a user's profile content inside the profile container.
+function createProfileContent() {
+    profileContainer.innerHTML = '';
+    const profileContent = `
+        <div class="profile-picture-section">
+            <img src="" alt="User Avatar" id="userAvatar">
+            <a class="view-profile-button" id="viewProfileButton" href="" target="_blank">View Profile</a>
+        </div>
+
+        <div class="profile-info-section">
+          <div class="profile-info-header">
+            <p class="profile-username" id="profileUsername">@username</p>
+            <p class="profile-created-date" id="profileCreatedDate">Member Since XX Mon XXXX</p>
+          </div>
+          <div class="profile-info-stats">
+            <div class="stat-item">
+              <p class="stat-name">Public Repos</p>
+              <p class="stat-count" id="publicReposCount">X</p>
+            </div>
+            <div class="stat-item">
+              <p class="stat-name">Followers</p>
+              <p class="stat-count" id="followersCount">X</p>
+            </div>
+            <div class="stat-item">
+              <p class="stat-name">Following</p>
+              <p class="stat-count" id="followingCount">X</p>
+            </div>
+          </div>
+          <div class="profile-info-bio">
+            <div class="bio-grid">
+              <div class="bio-grid-item">
+                <p id="locationLabel">Location:</p><p id="locationValue" class="bio-grid-item-value">locationName</p>
+              </div>
+              <div class="bio-grid-item">
+                <p id="twitterHandleLabel">Twitter:</p><p id="twitterHandleValue" class="bio-grid-item-value">@twitterHandle</p>
+              </div>
+              <div class="bio-grid-item">
+                <p id="blogLabel">Blog:</p><p id="blogValue" class="bio-grid-item-value">blogURL</p>
+              </div>
+              <div class="bio-grid-item">
+                <p id="companyLabel">Company:</p><p id="companyValue" class="bio-grid-item-value">companyName</p>
+              </div>
+            </div>
+          </div>
+        </div>
+    `;
+    profileContainer.innerHTML = profileContent;
+}
+
 // Creates a single repo element with complete HTML structure and styling.
 // Populates repo name as clickable link, language, stars, watchers, and forks.
 // Returns fully constructed DOM element ready to be appended to container.
@@ -176,19 +265,18 @@ function createRepoElement(repo) {
         </div>
         <div class="repo-stats-section">
             <div class="repo-stat">
-                <p id="languageLabel">Language:</p><p id="languageValue" class="repo-stat-value">${repo.language}</p>
+                <p id="languageLabel">Language:</p><p id="languageValue" class="repo-stat-value">${repo.language || "Not available"}</p>
             </div>
             <div class="repo-stat">
-                <p id="starsLabel">Stars:</p><p id="starsValue" class="repo-stat-value">${repo.stargazers_count}</p>
+                <p id="starsLabel">Stars:</p><p id="starsValue" class="repo-stat-value">${repo.stargazers_count || "Not available"}</p>
             </div>
             <div class="repo-stat">
-                <p id="watchersLabel">Watchers:</p><p id="watchersValue" class="repo-stat-value">${repo.watchers_count}</p>
+                <p id="watchersLabel">Watchers:</p><p id="watchersValue" class="repo-stat-value">${repo.watchers_count || "Not available"}</p>
             </div>
             <div class="repo-stat">
-                <p id="forksLabel">Forks:</p><p id="forksValue" class="repo-stat-value">${repo.forks_count}</p>
+                <p id="forksLabel">Forks:</p><p id="forksValue" class="repo-stat-value">${repo.forks_count || "Not available"}</p>
             </div>
         </div>
     `;
-
     return repoDiv;
 }

@@ -84,6 +84,9 @@ async function fetchRepoData(username) {
     return await fetchGitHubData(username, "/repos");
 }
 
+// Sorts repository data by a specified date field and returns the most recent ones.
+// Takes repo array, sort field (e.g., "updated_at"), and desired count.
+// Returns array of repositories sorted by most recent first, limited to specified count.
 function getRecentRepos(repoData, orderBy, count) {
     const sortedRepos = repoData.sort(function (a, b) {
         return new Date(b[orderBy]) - new Date(a[orderBy])
@@ -146,6 +149,9 @@ function updateBioField(labelId, valueId, dataValue) {
     }
 }
 
+// Clears existing repo elements and creates new ones from recent repos data.
+// Dynamically generates repo HTML structure and populates with GitHub repo data.
+// Shows the repos container after all elements are created and added.
 function updateRecentReposContainer(recentRepos) {
     recentReposContainer.innerHTML = "";
 
@@ -157,6 +163,9 @@ function updateRecentReposContainer(recentRepos) {
     recentReposContainer.style.display = "flex";
 }
 
+// Creates a single repo element with complete HTML structure and styling.
+// Populates repo name as clickable link, language, stars, watchers, and forks.
+// Returns fully constructed DOM element ready to be appended to container.
 function createRepoElement(repo) {
     const repoDiv = document.createElement("div");
     repoDiv.className = "repo";

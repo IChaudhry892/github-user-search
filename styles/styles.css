@@ -88,6 +88,7 @@ p, h2, h1 {
   display: flex;
   margin: 0 auto;
   padding: 1rem;
+  margin-bottom: 1.5rem;
 }
 .profile-picture-section {
   border: 1px solid red;
@@ -169,5 +170,49 @@ p, h2, h1 {
   flex: 1;
 }
 .bio-grid-item-value {
+  flex: 2;
+}
+
+.recent-repos-container {
+  border: 1px solid green;
+  max-width: 900px;
+  width: 87%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: 1rem;
+}
+.repo {
+  border: 1px solid red;
+  padding: 1rem;
+  display: flex;
+  margin-bottom: 1rem;
+}
+.repo:last-child {
+  margin: 0;
+}
+.repo-name-section {
+  flex: 1.25;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+.repo-name-section p {
+  padding-left: 0.5rem;
+}
+.repo-stats-section {
+  flex: 3;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.5rem 0rem;
+}
+.repo-stat {
+  display: flex;
+}
+.repo-stat p:first-child {
+  flex: 1;
+}
+.repo-stat-value {
   flex: 2;
 }

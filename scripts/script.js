@@ -2,6 +2,7 @@ const searchButton = document.querySelector(".search-button");
 const usernameInput = document.getElementById("usernameInput");
 const profileContainer = document.querySelector(".profile-container");
 const searchErrorContainer = document.querySelector(".search-error-container");
+const recentReposContainer = document.querySelector(".recent-repos-container");
 
 // Event Listeners
 searchButton.addEventListener("click", loadUserProfile);
@@ -31,7 +32,9 @@ async function loadUserProfile() {
         updateProfileContainer(userData);
 
         const repoData = await fetchRepoData(username);
-        console.log(repoData);
+        console.log(repoData);  // FOR DEBUGGING
+        const recentRepos = getRecentRepos(repoData, "updated_at", 5);
+        updateRecentReposContainer(recentRepos);
     } catch (error) {
         console.error(error);
         updateSearchErrorContainer("Error: User Not Found");
@@ -71,6 +74,16 @@ async function fetchUserData(username) {
 // Returns: JSON array containing repo details if successful.
 async function fetchRepoData(username) {
     return await fetchGitHubData(username, "/repos");
+}
+
+function getRecentRepos(repoData, orderBy, count) {
+    const sortedRepos = repoData.sort(function (a, b) {
+        return new Date(b[orderBy]) - new Date(a[orderBy])
+    })
+    console.log(sortedRepos);   // FOR DEBUGGING
+    const recentRepos = sortedRepos.slice(0, count);
+    console.log(recentRepos);   // FOR DEBUGGING
+    return recentRepos;
 }
 
 // Updates the h2 element inside the search error container with a custom error
@@ -125,6 +138,38 @@ function updateBioField(labelId, valueId, dataValue) {
     }
 }
 
-function updateRecentReposContainer() {
+function updateRecentReposContainer(recentRepos) {
+    recentRepos.forEach((repo) => {
+        const repoElement = createRepoElement(repo);
+        recentReposContainer.appendChild(repoElement);
+    });
 
+    recentReposContainer.style.display = "flex";
+}
+
+function createRepoElement(repo) {
+    const repoDiv = document.createElement("div");
+    repoDiv.className = "repo";
+
+    repoDiv.innerHTML = `
+    <div class="repo-name-section">
+        <a href=${repo.html_url} target="__blank">${repo.name}</a>
+        </div>
+        <div class="repo-stats-section">
+        <div class="repo-stat">
+            <p id="languageLabel">Language:</p><p id="languageValue" class="repo-stat-value">${repo.language}</p>
+        </div>
+        <div class="repo-stat">
+            <p id="starsLabel">Stars:</p><p id="starsValue" class="repo-stat-value">${repo.stargazers_count}</p>
+        </div>
+        <div class="repo-stat">
+            <p id="watchersLabel">Watchers:</p><p id="watchersValue" class="repo-stat-value">${repo.watchers_count}</p>
+        </div>
+        <div class="repo-stat">
+            <p id="forksLabel">Forks:</p><p id="forksValue" class="repo-stat-value">${repo.forks_count}</p>
+        </div>
+        </div>
+    `;
+
+    return repoDiv;
 }

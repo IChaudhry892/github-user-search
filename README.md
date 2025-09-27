@@ -2,6 +2,10 @@
 
 A web application that allows users to search for GitHub profiles and view detailed information about users and their repositories.
 
+## 🚀 Live Demo
+
+[View Live Site](https://magenta-pastelito-6c925d.netlify.app/)
+
 ## 📋 Features
 
 - **User Profile Search**: Search for any GitHub user by username
